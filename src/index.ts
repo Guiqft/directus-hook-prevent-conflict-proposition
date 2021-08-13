@@ -3,7 +3,7 @@ import { getArrayIntersection, getIDs } from './utils';
 
 const registerHook: HookRegisterFunction = ({ services, exceptions }) => {
 	const { ItemsService } = services;
-	const { ServiceUnavailableException, ForbiddenException, InvalidPayloadException } = exceptions;
+	const { ServiceUnavailableException, InvalidPayloadException } = exceptions;
 
 	return {
 		'items.update.before': async function (input: any, { collection, schema }: EventHandlerArguments) {
