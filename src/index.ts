@@ -12,19 +12,18 @@ const registerHook: HookRegisterFunction = ({ services, exceptions }) => {
 			const singlePropositions: any[] = input.proposicao || [];
 			const blockPropositions: any[] = input.proposicao_bloco || [];
 
-			if (blockPropositions.length > 0 && singlePropositions.length > 0) {
-				try {
-					const singlePropositionsIDS = await getIDs(singlePropositions, 'single', ItemsService, schema);
-					const blockPropositionsIDS = await getIDs(blockPropositions, 'block', ItemsService, schema);
+			try {
+				const singlePropositionsIDS = await getIDs(singlePropositions, 'single', ItemsService, schema);
+				const blockPropositionsIDS = await getIDs(blockPropositions, 'block', ItemsService, schema);
 
-					const intersection = getArrayIntersection(singlePropositionsIDS, blockPropositionsIDS);
-					if (intersection.length > 0) {
-						throw new InvalidPayloadException('Existem proposições em votação por item e bloco ao mesmo tempo.');
-					}
-				} catch (e) {
-					throw new ServiceUnavailableException(e, { service: 'prevent-conflict-propositions' });
+				const intersection = getArrayIntersection(singlePropositionsIDS, blockPropositionsIDS);
+				if (intersection.length > 0) {
+					throw new InvalidPayloadException('Existem proposições em votação por item e bloco ao mesmo tempo.');
 				}
+			} catch (e) {
+				throw new ServiceUnavailableException(e, { service: 'prevent-conflict-propositions' });
 			}
+
 			return input;
 		},
 	};
