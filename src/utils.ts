@@ -19,8 +19,10 @@ export const getIDs = async (
 		const relationsIDs = values.filter((el) => typeof el === 'number');
 		const propositionsIDs = values.filter((el) => typeof el === 'object').map((el) => el.proposicoes_id);
 
-		const relationsData = await relationService.readMany(relationsIDs);
-		relationsData.map((relation) => ids.push(relation.proposicoes_id));
+		if (relationsIDs.length > 0) {
+			const relationsData = await relationService.readMany(relationsIDs);
+			relationsData.map((relation) => ids.push(relation.proposicoes_id));
+		}
 
 		ids = [...ids, ...propositionsIDs];
 
